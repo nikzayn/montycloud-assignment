@@ -1,3 +1,4 @@
+"""API Gateway for proxying Lambdas"""
 import base64
 import json
 import os
@@ -13,11 +14,13 @@ CORS_HEADERS = {
     "Access-Control-Allow-Methods": "GET,POST,DELETE,OPTIONS",
 }
 
-# --- responses ----
+
+# ---- responses ---------------------------------------------------------------------
 def _json_default(value: Any) -> Any:
     if isinstance(value, Decimal):
         return int(value) if value % 1 == 0 else float(value)
     raise TypeError(f"{type(value).__name__} is not JSON serializable")
+
 
 def json_response(status_code: int, body: Any) -> Dict[str, Any]:
     return {
@@ -25,6 +28,7 @@ def json_response(status_code: int, body: Any) -> Dict[str, Any]:
         "headers": {"Content-Type": "application/json", **CORS_HEADERS},
         "body": json.dumps(body, default=_json_default),
     }
+
 
 def no_content() -> Dict[str, Any]:
     return {"statusCode": 204, "headers": dict(CORS_HEADERS), "body": ""}
@@ -47,20 +51,24 @@ def json_body(event: Dict[str, Any]) -> Any:
         if event.get("isBase64Encoded"):
             raw = base64.b64decode(raw, validate=True).decode("utf-8")
         return json.loads(raw)
-    except ValueError:
+    except ValueError:  # bad base64, bad UTF-8 or bad JSON
         raise BadRequest("Request body must be valid JSON")
+
 
 def query_param(event: Dict[str, Any], name: str) -> Optional[str]:
     return (event.get("queryStringParameters") or {}).get(name)
 
+
 def path_param(event: Dict[str, Any], name: str) -> str:
     return (event.get("pathParameters") or {}).get(name) or ""
+
 
 def header(event: Dict[str, Any], name: str) -> Optional[str]:
     for key, value in (event.get("headers") or {}).items():  # headers are case-insensitive
         if key.lower() == name.lower():
             return value
     return None
+
 
 def caller_id(event: Dict[str, Any]) -> str:
     """Who is making this request?
