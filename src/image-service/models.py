@@ -1,5 +1,4 @@
 from dataclasses import asdict, dataclass, field, fields
-from tkinter import ACTIVE
 from typing import Any, Dict, List, Optional
 
 #allowed content types
@@ -38,6 +37,37 @@ class Image:
     rejection_reason: Optional[str] = None
     expires_at: Optional[int] = None
 
+    def to_item(self) -> Dict[str, Any]:
+        """DynamoDB item. Empty/None attributes are simply left out."""
+        return {key: value for key, value in asdict(self).items() if value not in (None, "", [])}
+
+    @classmethod
+    def from_item(cls, item: Dict[str, Any]) -> "Image":
+        known = {f.name for f in fields(cls)}
+        data = {key: value for key, value in item.items() if key in known}
+        for number in ("size_bytes", "expires_at"):
+            if data.get(number) is not None:
+                data[number] = int(data[number])
+        data["tags"] = list(data.get("tags", []))
+        return cls(**data)
+
+    def to_public_dict(self) -> Dict[str, Any]:
+        """What API clients see. Internal fields (s3_key, expires_at) stay private."""
+        public = {
+            "image_id": self.image_id,
+            "user_id": self.user_id,
+            "title": self.title,
+            "description": self.description,
+            "tags": self.tags,
+            "content_type": self.content_type,
+            "size_bytes": self.size_bytes,
+            "status": self.status,
+            "created_at": self.created_at,
+            "uploaded_at": self.uploaded_at,
+        }
+        if self.rejection_reason:
+            public["rejection_reason"] = self.rejection_reason
+        return public
 
 
 
