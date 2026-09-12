@@ -8,8 +8,11 @@ class Settings:
     table_name: str
     bucket_name: str
     region: str = "us-east-1"
-    endpoint_url: str | Optional = None
-    public_s3_endpoint_url: str | Optional = None
+    # Override the AWS endpoint (used for LocalStack). None means real AWS.
+    endpoint_url: Optional[str] = None
+    # Endpoint put inside the pre-signed URLs we hand to clients. Locally, the Lambda
+    # reaches LocalStack through a different hostname than your laptop does.
+    public_s3_endpoint_url: Optional[str] = None
     max_upload_bytes: int = 10 * 1024 * 1024               # 10 MB
     upload_url_ttl_seconds: int = 15 * 60                  # pre-signed upload form lifetime
     download_url_ttl_seconds: int = 5 * 60                 # pre-signed download URL lifetime
