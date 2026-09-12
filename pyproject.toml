@@ -1,0 +1,4 @@
+[tool.pytest.ini_options]
+pythonpath = ["src", "."]
+testpaths = ["tests"]
+addopts = "-q --cov=image_service --cov-report=term-missing"
