@@ -1,15 +1,5 @@
-"""AWS Lambda entry points.
+"""AWS Lambda entry points."""
 
-Every API route is its own Lambda function (see scripts/deploy_local.py), all built
-from this one module. Handlers stay thin: parse request -> call service -> respond.
-
-    POST   /images                       create_image        upload step 1
-    (S3 ObjectCreated on images/*)       on_upload_complete  upload step 2
-    GET    /images                       list_images
-    GET    /images/{image_id}            get_image
-    GET    /images/{image_id}/download   download_image
-    DELETE /images/{image_id}            delete_image
-"""
 import logging
 from functools import lru_cache, wraps
 from typing import Any, Callable, Dict
