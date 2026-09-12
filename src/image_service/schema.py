@@ -1,10 +1,13 @@
-from typing import Any, dict
+"""DynamoDB table schema"""
 
-STATUS_INDEX = "staus-created-at-index"
-USER_INDEX = "user_id-created-at-index"
+from typing import Any, Dict
+
+STATUS_INDEX = "status-created_at-index"
+USER_INDEX = "user_id-created_at-index"
 TTL_ATTRIBUTE = "expires_at"
 
-def _index(name: str, partition_key: str) -> dict[str, Any]:
+
+def _index(name: str, partition_key: str) -> Dict[str, Any]:
     return {
         "IndexName": name,
         "KeySchema": [
@@ -15,7 +18,8 @@ def _index(name: str, partition_key: str) -> dict[str, Any]:
     }
 
 
-def table_definition(table_name: str) -> dict[str, Any]:
+def table_definition(table_name: str) -> Dict[str, Any]:
+    """Keyword arguments for DynamoDB `create_table`."""
     return {
         "TableName": table_name,
         "BillingMode": "PAY_PER_REQUEST",
