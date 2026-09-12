@@ -1,0 +1,12 @@
+services:
+  localstack:
+    container_name: image-service-localstack
+    image: ${LOCALSTACK_IMAGE:-localstack/localstack:latest}
+    ports:
+      - "4566:4566"
+    environment:
+      - LOCALSTACK_AUTH_TOKEN=${LOCALSTACK_AUTH_TOKEN:-}
+      - SERVICES=s3,dynamodb,lambda,apigateway,iam,sts,logs
+    volumes:
+      # LocalStack runs each Lambda in its own Docker container, so it needs the socket.
+      - "/var/run/docker.sock:/var/run/docker.sock"
