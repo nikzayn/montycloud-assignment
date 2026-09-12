@@ -1,5 +1,6 @@
 import os
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass(frozen=True)
@@ -7,8 +8,8 @@ class Settings:
     table_name: str
     bucket_name: str
     region: str = "us-east-1"
-    endpoint_url: str | None = None
-    public_s3_endpoint_url: str | None = None
+    endpoint_url: str | Optional = None
+    public_s3_endpoint_url: str | Optional = None
     max_upload_bytes: int = 10 * 1024 * 1024               # 10 MB
     upload_url_ttl_seconds: int = 15 * 60                  # pre-signed upload form lifetime
     download_url_ttl_seconds: int = 5 * 60                 # pre-signed download URL lifetime
