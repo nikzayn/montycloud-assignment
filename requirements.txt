@@ -1,0 +1,3 @@
+# Runtime dependency. The AWS Lambda Python runtime already bundles boto3,
+# so nothing needs to be packaged with the function; this is for local use.
+boto3>=1.28

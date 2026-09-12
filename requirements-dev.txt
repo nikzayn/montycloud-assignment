@@ -1,0 +1,5 @@
+-r requirements.txt
+moto[s3,dynamodb]>=5.0   # in-memory fakes of S3 and DynamoDB for unit tests
+pytest>=7.0
+pytest-cov>=4.0
+requests>=2.28           # used by scripts/client.py
