@@ -183,5 +183,5 @@ curl --location --request DELETE 'http://localhost:4566/restapis/{API_ID}/local/
 
 ## Scope of Improvements
 
-1. State synchronization between S3 and DynamoDB - which could improve resumeable downloads and as well as reduce race conditions
-    The file lives in S3 and its metadata in DynamoDB, joined by s3_key, so the two can drift apart if something fails in between — an orphaned object with no record, or a record whose upload never arrived. Adding an SQS queue between S3 and the upload trigger would make those events durable rather than best-effort, with configurable retries and a dead-letter queue for repeated failures instead of silent drops. A scheduled reconciliation job comparing s3_key values against the bucket in both directions would clear any remaining drift.
+1. State synchronization between S3 and DynamoDB - which could improve resumeable downloads and as well as reduce race conditions    
+The file lives in S3 and its metadata in DynamoDB, joined by s3_key, so the two can drift apart if something fails in between, an orphaned object with no record, or a record whose upload never arrived. Adding an SQS queue between S3 and the upload trigger would make those events durable rather than best effort, with configurable retries and a dead-letter queue for repeated failures instead of silent drops. A scheduled reconciliation job comparing s3_key values against the bucket in both directions would clear any remaining drift.
