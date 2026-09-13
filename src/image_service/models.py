@@ -10,7 +10,6 @@ CONTENT_TYPE_EXTENSIONS = {
     "image/webp": "webp",
 }
 
-
 class ImageStatus:
     PENDING = "PENDING"    # metadata saved, waiting for the file to arrive in S3
     ACTIVE = "ACTIVE"      # file uploaded and verified; visible in listings
@@ -25,7 +24,7 @@ class Image:
     content_type: str                      # e.g. image/png
     s3_key: str                            # images/<image_id>.<ext>
     status: str                            # see ImageStatus
-    created_at: str                        # ISO-8601 UTC with microseconds -> sorts correctly as a string
+    created_at: str                        
     description: str = ""
     tags: List[str] = field(default_factory=list)
     size_bytes: Optional[int] = None       # known once the upload completes
